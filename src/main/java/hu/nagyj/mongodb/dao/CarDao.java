@@ -8,6 +8,7 @@ import org.bson.Document;
 
 import hu.nagyj.mongodb.model.Car;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CarDao {
@@ -24,9 +25,14 @@ public class CarDao {
         this.collection.insertOne(car.getDocument());
     }
 
-    public void createCars(List<Car> cars) {
+    public void CreateCars(List<Car> cars) {
         List<Document> carDocuments = cars.stream().map(x -> x.getDocument()).toList();
         this.collection.insertMany(carDocuments);
+    }
+
+    public void updateOldCarsColor() {
+        Document updateObject = new Document("$set", new Document("color", "Red"));
+        this.collection.updateMany(new Document("year", new Document("$lt", 2000)), updateObject);
     }
 
     public MongoCursor<Document> GetByPlateNumber(String plateNumber) {
@@ -37,5 +43,13 @@ public class CarDao {
     public MongoCursor<Document> GetAll() {
         MongoCursor<Document> documents = this.collection.find(new Document()).iterator();
         return documents;
+    }
+
+    public void Delete(String plateNumber) {
+        this.collection.deleteOne(new Document("plateNumber", plateNumber));
+    }
+
+    public void Clean() {
+        this.collection.deleteMany(new Document());
     }
 }

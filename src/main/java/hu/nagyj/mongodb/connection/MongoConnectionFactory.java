@@ -8,7 +8,7 @@ public class MongoConnectionFactory {
 
     public MongoClient CreateConnection() {
         if (this.mongoClient == null) {
-            this.mongoClient = new MongoClient("localhost", 27001);
+            this.mongoClient = new MongoClient("localhost", 27017);
         }
         return this.mongoClient;
     }
